@@ -90,7 +90,7 @@
         }
     }
 }
-.poke-card:hover {
+.poke-card:hover, .poke-selected {
     -webkit-box-shadow: 0px 0px 15px 0px rgba(41, 255, 162, 0.75);
     -moz-box-shadow: 0px 0px 15px 0px rgba(41, 255, 162, 0.75);
     box-shadow: 0px 0px 15px 0px rgba(41, 255, 162, 0.75);

@@ -1,8 +1,8 @@
 <!-- dixper-poke-cards -->
-<div *ngIf="pokemons" class="poke-cards overflow-auto">
+<div *ngIf="pokemones" class="poke-cards overflow-auto">
     <div class="row">
-        <div class="col-sm-12 col-md-6 poke-card" *ngFor="let pokemon of pokemons">
-            <dixper-poke-card></dixper-poke-card>
+        <div class="col-sm-12 col-md-6 poke-card" *ngFor="let pokemon of pokemones">
+            <dixper-poke-card [pokemonID]="pokemon"></dixper-poke-card>
         </div>
     </div>
 </div>

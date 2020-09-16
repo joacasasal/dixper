@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import { Action } from "@ngrx/store";
 
 import { Pokemon } from "./pokemon.model";
@@ -14,15 +15,20 @@ export const inicializePokemonesState = () => {
 
 // Actions
 export enum PokemonesStateActionTypes {
+    SET = '[Pokemones] Set',
     SELECT = '[Pokemones] Select'
 }
 
+export class SetPokemonesListAction implements Action {
+    type = PokemonesStateActionTypes.SET;
+    constructor(public pokemones: Pokemon[]) {}
+}
 export class SelectPokemonAction implements Action {
     type = PokemonesStateActionTypes.SELECT;
     constructor(public pokemon: Pokemon) {}
 }
 
-export type PokemonesActions = SelectPokemonAction;
+export type PokemonesActions = SetPokemonesListAction | SelectPokemonAction;
 
 // Reducer
 export function reducerPokemones (
@@ -30,10 +36,30 @@ export function reducerPokemones (
     action: PokemonesActions
 ) : PokemonesState {
     switch (action.type) {
+        case PokemonesStateActionTypes.SET: {
+            return {
+                list: (action as SetPokemonesListAction).pokemones
+            };
+        }
         case PokemonesStateActionTypes.SELECT: {
-            state.list.forEach(pokemon => pokemon.selected = false);
-            const pokemonSel = (action as SelectPokemonAction).pokemon;
-            pokemonSel.selected = true;
+            const list = _.cloneDeep([...state.list]);
+            list.forEach((pokemon: Pokemon) => {
+                if (pokemon.name !== (action as SelectPokemonAction).pokemon.name) {
+                    pokemon.selected = false;
+                }
+            });
+            list.map((pokemon: Pokemon) => {
+                if (pokemon.name === (action as SelectPokemonAction).pokemon.name) {
+                    pokemon.selected = !pokemon.selected;
+                }
+
+                return pokemon;
+            });
+
+            return {
+                ...state,
+                list: list
+            };
         }
     }
 
