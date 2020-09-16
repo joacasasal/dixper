@@ -60,11 +60,11 @@
     .card-body {
         padding: 0;
 
-        .poke-types {
+        .card-title {
             font-weight: 700;
         }
 
-        .poke-skill {
+        .poke-types {
             font-weight: 700;
         }
     }
@@ -72,6 +72,10 @@
     .card-footer {
         background-color: transparent;
         border: none;
+
+        .row {
+            width: 100%;
+        }
 
         [class*="col-"] {
             padding: 0;

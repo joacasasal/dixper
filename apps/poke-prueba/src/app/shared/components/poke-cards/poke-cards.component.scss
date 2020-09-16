@@ -1,9 +1,15 @@
 .poke-cards {
     height: 100%;
+    width: 100%;
     padding: 20px;
 
     .poke-card {
         height: 100%;
         padding: 20px;
+    }
+
+    /* Medium devices (landscape tablets, 768px and up) */
+    @media only screen and (min-width: 768px) {
+        width: calc(100% - 30%); // 100% - details-sidebar
     }
 }

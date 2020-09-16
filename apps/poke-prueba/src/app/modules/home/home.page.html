@@ -3,17 +3,15 @@
   <div class="container-fluid">
     <div class="row">
       <!-- TYPES SIDEBAR -->
-      <div class="col-2 pl-0">
-        <dixper-poke-types-sidebar></dixper-poke-types-sidebar>
-      </div>
+      <dixper-poke-types-sidebar></dixper-poke-types-sidebar>
 
       <!-- CARDS -->
-      <div [ngClass]="showDetails >= 0 ? 'col-6' : 'col-10'" class="pl-0">
+      <div class="col-sm-12 col-md-9 offset-md-3 p-0 mx-auto">
         <dixper-poke-cards></dixper-poke-cards>
       </div>
 
       <!-- DETAILS SIDEBAR-->
-      <div *ngIf="showDetails >= 0" class="col-4">
+      <div *ngIf="showDetails >= 0">
         <dixper-poke-details-sidebar></dixper-poke-details-sidebar>
       </div>
     </div>

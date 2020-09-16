@@ -24,19 +24,13 @@
 
   <!-- Poke Data -->
   <div class="card-body">
-    <h5 class="card-title">{{pokemon.name |titlecase}}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">{{pokemon.name |titlecase}}</h6>
+    <h4 class="card-title">{{pokemon.name |titlecase}}</h4>
 
     <!-- Types -->
     <div *ngIf="pokemon.types" class="poke-types">
       <span *ngFor="let type of pokemon.types; let t = index">
         {{type.type.name |uppercase}}<span *ngIf="pokemon.types[t + 1]"> · </span>
       </span>
-    </div>
-
-    <!-- Skill Link -->
-    <div class="poke-skill">
-      <a href="" class="text-muted">Skill Link</a>
     </div>
   </div>
 

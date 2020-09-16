@@ -1,8 +1,13 @@
 .poke-details-sidebar {
+    position: absolute;
+    right: 0;
+    z-index: 4;
     -webkit-box-shadow: -5px 0px 15px -5px rgba(0,0,0,0.25);
     -moz-box-shadow: -5px 0px 15px -5px rgba(0,0,0,0.25);
     box-shadow: -5px 0px 15px -5px rgba(0,0,0,0.25);
+    background-color: white;
 
     padding: 10px;
     height: 100vh;
+    width: 35%;
 }
