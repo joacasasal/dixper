@@ -42,7 +42,7 @@
             font-weight: 700;
             position: absolute;
             top: 0;
-            width: 100%;
+            width: calc(100% - 20px); // 100% - padding (20px)
             z-index: 1;
         }
 
@@ -80,6 +80,10 @@
         .stat-title {
             font-weight: 700;
         }
+
+        .progress {
+            height: .75rem;
+        }
     }
 }
 .poke-card:hover {
@@ -106,4 +110,10 @@
     border: none;
     pointer-events: none;
     padding: 0px;
+
+    .card-header {
+        .poke-id {
+            width: 100%;
+        }
+    }
 }
