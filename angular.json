@@ -1,0 +1,178 @@
+{
+  "version": 1,
+  "projects": {
+    "poke-prueba": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/poke-prueba",
+      "sourceRoot": "apps/poke-prueba/src",
+      "prefix": "dixper",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/poke-prueba",
+            "index": "apps/poke-prueba/src/index.html",
+            "main": "apps/poke-prueba/src/main.ts",
+            "polyfills": "apps/poke-prueba/src/polyfills.ts",
+            "tsConfig": "apps/poke-prueba/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/poke-prueba/src/favicon.ico",
+              "apps/poke-prueba/src/assets"
+            ],
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "apps/poke-prueba/src/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/poke-prueba/src/environments/environment.ts",
+                  "with": "apps/poke-prueba/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "poke-prueba:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "poke-prueba:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "poke-prueba:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/poke-prueba/tsconfig.app.json",
+              "apps/poke-prueba/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/poke-prueba/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/poke-prueba/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "poke-prueba-e2e": {
+      "root": "apps/poke-prueba-e2e",
+      "sourceRoot": "apps/poke-prueba-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/poke-prueba-e2e/cypress.json",
+            "tsConfig": "apps/poke-prueba-e2e/tsconfig.e2e.json",
+            "devServerTarget": "poke-prueba:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "poke-prueba:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/poke-prueba-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/poke-prueba-e2e/**/*"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/workspace": {
+      "library": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/cypress": {
+      "cypress-project": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/node": {
+      "application": {
+        "linter": "tslint"
+      },
+      "library": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/nest": {
+      "application": {
+        "linter": "tslint"
+      },
+      "library": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/express": {
+      "application": {
+        "linter": "tslint"
+      },
+      "library": {
+        "linter": "tslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "poke-prueba"
+}

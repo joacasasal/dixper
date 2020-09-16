@@ -1,0 +1,33 @@
+{
+  "npmScope": "dixper",
+  "affected": {
+    "defaultBase": "master"
+  },
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "tsconfig.base.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/workspace/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
+    }
+  },
+  "projects": {
+    "poke-prueba": {
+      "tags": []
+    },
+    "poke-prueba-e2e": {
+      "tags": [],
+      "implicitDependencies": ["poke-prueba"]
+    }
+  }
+}

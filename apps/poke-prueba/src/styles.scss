@@ -1,0 +1,40 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ */
+
+/* Custom CSS classes */
+:root {
+    .view-container {
+        height: 100vh;
+    }
+    .container-fluid {
+        width: 100% !important;
+        max-width: auto !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+
+        > .row {
+            height: 100%;
+            margin: 0;
+
+            > [class*="col-"] {
+                height: 100%;
+            }
+        }
+    }
+}
+
+:focus {
+    outline:0 !important;
+}
+
+::-webkit-scrollbar {
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
