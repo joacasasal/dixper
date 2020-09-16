@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../app.module';
+
 import { TypesConstants } from '../../../constants/types.constant';
 
 /**
@@ -15,10 +18,19 @@ export class PokeTypeComponent implements OnInit {
   TYPES = TypesConstants.TYPES;
 
   @Input() public type: any;
-  @Input() public typeSelected: boolean;
 
-  constructor() { }
+  public typeSelected: boolean;
+
+  constructor(private store: Store<AppState>) {
+  }
 
   ngOnInit(): void {
+  }
+
+  /**
+   * Selecciona un tipo de Pokémon.
+   */
+  selectType() {
+    this.typeSelected = !this.typeSelected
   }
 }

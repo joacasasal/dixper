@@ -1,5 +1,5 @@
 <!-- app-poke-type -->
-<button class="poke-type btn btn-primary" [ngStyle]="{'color': TYPES[type.name], 'background-color': typeSelected ? TYPES[type.name] : ''}">
+<button class="poke-type btn btn-primary" [ngStyle]="{'color': !typeSelected ? TYPES[type.name] : '', 'background-color': typeSelected ? TYPES[type.name] : ''}" (click)="selectType()">
     {{type.name}}
 </button>
 <!-- end app-poke-type -->
