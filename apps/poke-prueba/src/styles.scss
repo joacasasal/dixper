@@ -28,6 +28,21 @@
             }
         }
     }
+
+    .btn-primary {
+        color: #000;
+        background-color: #F8F7F7;
+        border-color: #F8F7F7;
+        font-weight: 700;
+    }
+    .btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+        color: #fff !important;
+        background-color: #c5c5c5 !important;
+        border-color: #c5c5c5 !important;
+    }
+    .btn-primary:focus {
+        box-shadow: none !important;
+    }
 }
 
 :focus {
