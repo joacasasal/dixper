@@ -35,7 +35,7 @@ const reducersInitialState = {
 // end Redux Config
 
 @NgModule({
-  declarations: [AppComponent, ...components, NgRxStoreModule],
+  declarations: [AppComponent, ...components],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
