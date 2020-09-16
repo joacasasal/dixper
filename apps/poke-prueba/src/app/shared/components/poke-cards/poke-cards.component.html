@@ -1,0 +1,9 @@
+<!-- dixper-poke-cards -->
+<div *ngIf="pokemons" class="poke-cards overflow-auto">
+    <div class="row">
+        <div class="col-6 poke-card" *ngFor="let pokemon of pokemons">
+            <dixper-poke-card></dixper-poke-card>
+        </div>
+    </div>
+</div>
+<!-- end dixper-poke-cards -->
