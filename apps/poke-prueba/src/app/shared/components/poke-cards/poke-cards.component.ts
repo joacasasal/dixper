@@ -1,11 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import * as _ from 'lodash';
 
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.module';
 import { SetPokemonesListAction } from '../../models/pokemones.model';
 
-import { Pokemon } from '../../models/pokemon.model';
+import { Pokemon, PokemonResponse, PokemonTypeResponse, PokeType } from '../../models/pokemon.model';
+
+import { PokemonService } from '../../services/pokemon.service';
 
 /**
  * Componente que muestra el Listado de Pokémones.
@@ -18,70 +21,78 @@ import { Pokemon } from '../../models/pokemon.model';
 export class PokeCardsComponent implements OnInit, OnDestroy {
 
   private subsStore: Subscription;
+  private subsState: Subscription;
 
   public pokemones: Pokemon[];
 
-  constructor(private store: Store<AppState>) {
-     this.subsStore = this.store.select(state => state.pokemones).subscribe((pokemones) => {
-        this.pokemones = pokemones.list;
-     });
+  constructor(
+    private store: Store<AppState>,
+    public pokemonSrv: PokemonService
+  ) {
+    this.subsStore = this.store.select(state => state.pokemones.list).subscribe((pokemones) => {
+      this.pokemones = pokemones;
+    });
+    this.subsState = this.store.select(state => state.pokemones.type).subscribe((type) => {
+      if (type) {
+        this.getPokemones(type);
+      } else {
+        this.getPokemones();
+      }
+    });
   }
 
   ngOnInit(): void {
-    this.getpokemones();
+    this.getPokemones();
   }
 
   /**
    * Obtiene los Pokémons del tipo seleccionado.
    */
-  getpokemones() {
-    // MOCK
-    this.pokemones = [
-      {
-        "name": "bulbasaur",
-        "url": "https://pokeapi.co/api/v2/pokemon/1/"
-      }
-    ];
-    // this.pokemones = [
-    //   {
-    //     "name": "bulbasaur",
-    //     "url": "https://pokeapi.co/api/v2/pokemon/1/"
-    //   },
-    //   {
-    //     "name": "ivysaur",
-    //     "url": "https://pokeapi.co/api/v2/pokemon/2/"
-    //   },
-    //   {
-    //     "name": "venusaur",
-    //     "url": "https://pokeapi.co/api/v2/pokemon/3/"
-    //   },
-    //   {
-    //     "name": "charmander",
-    //     "url": "https://pokeapi.co/api/v2/pokemon/4/"
-    //   },
-    //   {
-    //     "name": "charmeleon",
-    //     "url": "https://pokeapi.co/api/v2/pokemon/5/"
-    //   },
-    //   {
-    //     "name": "charizard",
-    //     "url": "https://pokeapi.co/api/v2/pokemon/6/"
-    //   }
-    // ];
-    // end MOCK
+  getPokemones(type?: PokeType) {
+    if (!type) {
+      const subsPoke = this.pokemonSrv.getPokemones().subscribe((data: PokemonResponse) => {
+        if (!data.results) {
+          data.results = [];
+        }
+        this.deselectAll(data.results);
+        this.store.dispatch(new SetPokemonesListAction(data.results, type));
 
-    if (this.pokemones && this.pokemones.length > 0) {
-      this.pokemones.forEach((pokemon) => {
+        subsPoke.unsubscribe();
+      });
+    } else { // Por tipo
+      const subsPoke = this.pokemonSrv.getPokemonesByType(type).subscribe((data: PokemonTypeResponse) => {
+        let pokemonTypeData = [];
+        if (!data.pokemon) {
+          data.pokemon = [];
+        } else {
+          data.pokemon.map((pokemon) => {
+            pokemonTypeData = [...pokemonTypeData, pokemon.pokemon];
+          });
+        }
+        this.deselectAll(pokemonTypeData);
+        this.store.dispatch(new SetPokemonesListAction(pokemonTypeData, type));
+  
+        subsPoke.unsubscribe();
+      });
+    }
+  }
+
+  /**
+   * Deselecciona todos los Pokémones.
+   * @param pokemones datos de los pokemones
+   */
+  deselectAll(pokemones: Pokemon[]) {
+    if (pokemones && pokemones.length > 0) {
+      pokemones.forEach((pokemon) => {
          pokemon.selected = false;
       });
     }
-
-    this.store.dispatch(new SetPokemonesListAction(this.pokemones));
   }
 
   // ---
 
   ngOnDestroy(): void {
     if (this.subsStore) { this.subsStore.unsubscribe(); }
-   }
+    if (this.subsState) { this.subsState.unsubscribe(); }
+  }
 }

@@ -1,3 +1,6 @@
+/**
+ * Modelo de un Pokémon.
+ */
 export class Pokemon {
     id?: number;
     name: string;
@@ -30,4 +33,37 @@ export class Pokemon {
 
         this.selected = data.selected;
     }
+}
+
+/**
+ * Modelo de un Tipo de Pokémon.
+ */
+export class PokeType {
+    name: string;
+    url: string;
+}
+
+/**
+ * Respuesta de los Pokemones.
+ */
+export class PokemonResponse {
+    count: number;
+    next: string;
+    previous: string;
+    results: Pokemon[];
+}
+
+/**
+ * Respuesta de los Pokemones de un tipo.
+ */
+export class PokemonTypeResponse {
+    id: number;
+    damage_relations: any;
+    game_indices: any;
+    generation: string;
+    move_damage_class: any;
+    moves: any[];
+    name: string;
+    names: any[];
+    pokemon: any[];
 }

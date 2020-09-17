@@ -11,6 +11,7 @@ import { PokeTypeComponent } from './components/poke-type/poke-type.component';
 import { PokeTypesSidebarComponent } from './components/poke-types-sidebar/poke-types-sidebar.component';
 
 // Services
+import { PokemonService } from './services/pokemon.service';
 
 const components = [
   PokeCardComponent,
@@ -21,6 +22,7 @@ const components = [
   PokeTypesSidebarComponent
 ];
 const services = [
+  PokemonService
 ];
 
 @NgModule({

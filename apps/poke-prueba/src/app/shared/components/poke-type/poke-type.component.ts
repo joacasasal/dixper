@@ -1,9 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { AppState } from '../../../app.module';
 
 import { TypesConstants } from '../../../constants/types.constant';
+
+import { SelectPokemonTypeAction } from '../../models/pokemones.model';
 
 /**
  * Componente que muestra un Botón con el Tipo de un Pokémon.
@@ -15,6 +18,8 @@ import { TypesConstants } from '../../../constants/types.constant';
 })
 export class PokeTypeComponent implements OnInit {
 
+  private subsState: Subscription;
+
   TYPES = TypesConstants.TYPES;
 
   @Input() public type: any;
@@ -22,6 +27,11 @@ export class PokeTypeComponent implements OnInit {
   public typeSelected: boolean;
 
   constructor(private store: Store<AppState>) {
+    this.subsState = this.store.select(state => state.pokemones.type).subscribe((type) => {
+      if (type && type.name !== this.type.name) {
+        this.typeSelected = false;
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -31,6 +41,8 @@ export class PokeTypeComponent implements OnInit {
    * Selecciona un tipo de Pokémon.
    */
   selectType() {
-    this.typeSelected = !this.typeSelected
+    this.typeSelected = !this.typeSelected;
+
+    this.store.dispatch(new SelectPokemonTypeAction(this.typeSelected ? this.type : null));
   }
 }

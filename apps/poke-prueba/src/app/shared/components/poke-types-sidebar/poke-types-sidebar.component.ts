@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { PokeType } from '../../models/pokemon.model';
+
 /**
  * Componente que muestra un SideBar con los Tipos de Pokémon.
  */
@@ -10,7 +12,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PokeTypesSidebarComponent implements OnInit {
 
-  public pokeTypes = [
+  public pokeTypes: PokeType[] = [
     {
       "name": "normal",
       "url": "https://pokeapi.co/api/v2/type/1/"
@@ -92,11 +94,11 @@ export class PokeTypesSidebarComponent implements OnInit {
       "url": "https://pokeapi.co/api/v2/type/10002/"
    }
   ];
-  public typeSelected = 0;
 
-  constructor() { }
+  constructor() {
+     
+  }
 
   ngOnInit(): void {
   }
-
 }
