@@ -54,6 +54,16 @@ export class PokemonResponse {
 }
 
 /**
+ * Respuesta de los tipos de Pokemones.
+ */
+export class PokemonTypesResponse {
+    count: number;
+    next: string;
+    previous: string;
+    results: PokeType[];
+}
+
+/**
  * Respuesta de los Pokemones de un tipo.
  */
 export class PokemonTypeResponse {
