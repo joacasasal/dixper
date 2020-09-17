@@ -29,9 +29,6 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     public pokemonSrv: PokemonService
   ) {
-    this.subsStore = this.store.select(state => state.pokemones.list).subscribe((pokemones) => {
-      this.pokemones = pokemones;
-    });
     this.subsState = this.store.select(state => state.pokemones.type).subscribe((type) => {
       if (type) {
         this.getPokemones(type);
@@ -49,13 +46,15 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
    * Obtiene los Pokémons del tipo seleccionado.
    */
   getPokemones(type?: PokeType) {
-    if (!type) {
+    if (!type) { // Todos
       const subsPoke = this.pokemonSrv.getPokemones().subscribe((data: PokemonResponse) => {
         if (!data.results) {
           data.results = [];
         }
         this.deselectAll(data.results);
         this.store.dispatch(new SetPokemonesListAction(data.results, type));
+
+        this.pokemones = data.results;
 
         subsPoke.unsubscribe();
       });
@@ -71,6 +70,8 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
         }
         this.deselectAll(pokemonTypeData);
         this.store.dispatch(new SetPokemonesListAction(pokemonTypeData, type));
+
+        this.pokemones = pokemonTypeData;
   
         subsPoke.unsubscribe();
       });

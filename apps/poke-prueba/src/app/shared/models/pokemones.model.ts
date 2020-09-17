@@ -3,6 +3,10 @@ import { Action } from "@ngrx/store";
 
 import { Pokemon, PokeType } from "./pokemon.model";
 
+/**
+ * Reducer de Pokemones.
+ */
+
 export interface PokemonesState {
     list: Pokemon[];
     type: PokeType;
@@ -53,30 +57,22 @@ export function reducerPokemones (
             };
         }
         case PokemonesStateActionTypes.SELECT: {
-            const list = [...state.list];
-            list.forEach((pokemon: Pokemon) => {
-                if (pokemon.name !== (action as SelectPokemonAction).pokemon.name) {
-                    pokemon.selected = false;
-                    // return {
-                    //     ...pokemon,
-                    //     selected: false
-                    // };
-                }
-            });
-            list.find((pokemon: Pokemon) => {
-                if (pokemon.name === (action as SelectPokemonAction).pokemon.name) {
-                    pokemon.selected = !pokemon.selected;
-                    // return {
-                    //     ...pokemon,
-                    //     selected: !pokemon.selected
-                    // };
-                }
-            });
-
             return {
                 ...state,
-                list
-            };
+                list: state.list.map((pokemon: Pokemon) => {
+                    if (pokemon.name !== (action as SelectPokemonAction).pokemon.name) {
+                        return {
+                            ...pokemon,
+                            selected: false
+                        };
+                    } else {
+                        return {
+                            ...pokemon,
+                            selected: !pokemon.selected
+                        };
+                    }
+                })
+            }
         }
         case PokemonesStateActionTypes.SELECT_TYPE: {
             return {

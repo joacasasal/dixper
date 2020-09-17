@@ -22,6 +22,7 @@ export class PokeDetailsComponent implements OnInit , OnDestroy {
 
   constructor(private store: Store<AppState>) {
     this.subsStore = this.store.select(state => state.pokemones).subscribe((pokemones) => {
+      this.pokemon = null;
       if (pokemones && pokemones.list && pokemones.list.length > 0) {
         this.pokemon = pokemones.list.find((pokemon: Pokemon) => pokemon.selected);
       }
