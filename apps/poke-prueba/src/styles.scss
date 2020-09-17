@@ -53,6 +53,10 @@
     .btn-primary:focus {
         box-shadow: none !important;
     }
+    .btn-primary:hover.btn-primary:focus {
+        background-color: #c5c5c5;
+        border-color: #c5c5c5;
+    }
 }
 
 :focus {
