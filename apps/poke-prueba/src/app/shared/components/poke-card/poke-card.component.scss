@@ -7,6 +7,10 @@
     border-radius: 20px;
     cursor: pointer;
 
+    * {
+        pointer-events: none;
+    }
+
     .poke-card-bubble {
         position: absolute;
         height: 60px;

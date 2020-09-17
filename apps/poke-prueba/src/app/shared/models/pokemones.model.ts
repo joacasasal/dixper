@@ -61,7 +61,7 @@ export function reducerPokemones (
         case PokemonesStateActionTypes.SELECT: {
             return {
                 ...state,
-                selected: !state.selected || state.selected.name !== (action as SelectPokemonAction).pokemon.name
+                selected: !state.selected || ((action as SelectPokemonAction).pokemon && state.selected.name !== (action as SelectPokemonAction).pokemon.name)
                     ? (action as SelectPokemonAction).pokemon
                     : null
             }

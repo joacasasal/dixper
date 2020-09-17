@@ -1,9 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { Subscription } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.module';
+
+import { SelectPokemonAction } from '../../models/pokemones.model';
 
 /**
  * Componente que muestra un Sidebar con los Detalles de un Pokémon.
@@ -34,7 +36,8 @@ export class PokeDetailsSidebarComponent implements OnInit, OnDestroy {
   public showDetails: boolean;
 
   constructor(
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private elementRef: ElementRef
   ) {
     this.subsStore = this.store.select(state => state.pokemones.selected).subscribe((pokemonSelected) => {
       if (pokemonSelected) {
@@ -46,6 +49,18 @@ export class PokeDetailsSidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+  }
+
+  /**
+   * Oculta el componente al hacer click fuera de él, mientras no sea en otro pokémon.
+   * @param event evento de click
+   */
+  @HostListener('document:mousedown', ['$event'])
+  closeSidebar(event: any): void {
+     if (this.showDetails
+      && !this.elementRef.nativeElement.contains(event.target) && (!event.srcElement || event.srcElement.id !== 'poke-card')) {
+      this.store.dispatch(new SelectPokemonAction(null));
+     }
   }
 
   // ---

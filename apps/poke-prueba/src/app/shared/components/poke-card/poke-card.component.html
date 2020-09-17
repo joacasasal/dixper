@@ -1,5 +1,5 @@
 <!-- dixper-poke-card -->
-<div *ngIf="pokemon" class="poke-card card text-center" [ngClass]="{'no-card': noCard, 'poke-selected': isSelected}" (click)="selectPokemon()">
+<div *ngIf="pokemon" class="poke-card card text-center" id="poke-card" [ngClass]="{'no-card': noCard, 'poke-selected': isSelected}" (click)="selectPokemon()">
   <!-- Bubbles Data -->
   <div *ngIf="!noCard">
     <!-- height -->
