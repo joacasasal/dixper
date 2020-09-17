@@ -1,5 +1,5 @@
 <!-- app-poke-details-sidebar -->
-<div class="poke-details-sidebar overflow-auto">
+<div *ngIf="showDetails" class="poke-details-sidebar overflow-auto" [@fadeAnim]>
     <dixper-poke-details></dixper-poke-details>
 </div>
 <!-- end app-poke-details-sidebar -->
