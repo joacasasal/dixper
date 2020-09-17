@@ -1,9 +1,13 @@
 <!-- dixper-poke-cards -->
-<div *ngIf="pokemones" class="poke-cards overflow-auto">
+<div *ngIf="!isLoading && pokemones" class="poke-cards" (scroll)="onScroll($event)">
     <div class="row">
-        <div class="col-sm-12 col-md-6 poke-card" *ngFor="let pokemon of pokemones">
+        <div class="col-sm-12 col-md-4 poke-card" *ngFor="let pokemon of pokemones">
             <dixper-poke-card [pokemonID]="pokemon"></dixper-poke-card>
         </div>
     </div>
+</div>
+<!-- Spinner -->
+<div *ngIf="isLoading" class="spinner centered">
+    <span class="loader"></span>
 </div>
 <!-- end dixper-poke-cards -->

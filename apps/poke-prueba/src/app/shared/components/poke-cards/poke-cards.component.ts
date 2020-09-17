@@ -23,7 +23,13 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
   private subsStore: Subscription;
   private subsState: Subscription;
 
+  public pokemonesAll: Pokemon[];
   public pokemones: Pokemon[];
+
+  public isLoading: boolean;
+
+  // Pag
+  public actualPag = 1;
 
   constructor(
     private store: Store<AppState>,
@@ -39,6 +45,8 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
    * Obtiene los Pokémons del tipo seleccionado.
    */
   getPokemones(type?: PokeType) {
+    this.isLoading = true;
+    window.scroll(0, 0);
     if (!type) { // Todos
       const subsPoke = this.pokemonSrv.getPokemones().subscribe((data: PokemonResponse) => {
         if (!data.results) {
@@ -46,7 +54,8 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
         }
         this.store.dispatch(new SetPokemonesListAction(data.results, type));
 
-        this.pokemones = data.results;
+        this.pokemonesAll = data.results;
+        this.pokemones = data.results.slice(0, 6 * this.actualPag);
 
         if (!this.subsState) {
           this.subsState = this.store.select(state => state.pokemones.type).subscribe((pokeType) => {
@@ -60,6 +69,7 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
           });
         }
 
+        this.isLoading = false;
         subsPoke.unsubscribe();
       });
     } else { // Por tipo
@@ -76,10 +86,15 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
 
         this.pokemones = pokemonTypeData;
   
+        this.isLoading = false;
         subsPoke.unsubscribe();
       });
     }
   }
+
+  onScroll($event: any) {
+    console.log($event);
+  };
 
   // ---
 

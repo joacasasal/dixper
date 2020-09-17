@@ -27,6 +27,13 @@
                 height: 100%;
             }
         }
+
+        .poke-content {
+            margin-left: 12%;
+            margin-right: 0;
+            height: 100%;
+            width: 100%;
+        }
     }
 
     .btn-primary {
@@ -56,6 +63,62 @@
     .btn-primary:hover.btn-primary:focus {
         background-color: #c5c5c5;
         border-color: #c5c5c5;
+    }
+
+    .spinner {
+        height: 100%;
+        width: 100%;
+        .loader {
+            width: 50px;
+            height: 50px;
+            display: block;
+            margin:15px auto;
+            position: relative;
+            color: #c5c5c5;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        .loader::after,
+        .loader::before {
+            content: '';  
+            box-sizing: border-box;
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            top: 50%;
+            left: 50%;
+            transform: scale(0.5) translate(0, 0);
+            background-color: #c5c5c5;
+            border-radius: 50%;
+            animation: animloader 1s infinite ease-in-out;
+        }
+        .loader::before {
+            background-color: #FF3D00;
+            transform: scale(0.5) translate(-50px, -50px);
+        }
+          
+        @keyframes rotation {
+            0% {
+              transform: rotate(0deg);
+            }
+            100% {
+              transform: rotate(360deg);
+            }
+          } 
+        @keyframes animloader {
+            50% {
+                transform: scale(1) translate(-50%, -50%);
+            }
+        }      
+    }
+
+    /* Center */
+    .centered {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        height: 100%;
+        width: 100%;
     }
 }
 

@@ -23,7 +23,7 @@ export class PokemonService {
    */
   public getPokemones(): Observable<PokemonResponse> {
     const params = {
-      limit: '6'
+      // limit: '6' // Pagina el número de pokemones
     };
 
     return this.http.get<PokemonResponse>(this.apiUrl + 'pokemon', { params, observe: 'response' }).pipe(
