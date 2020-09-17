@@ -20,8 +20,6 @@ export class Pokemon {
     order?: number;
     species?: any;
     weight?: number;
-
-    selected?: boolean;
     
     constructor(data: any) {
         this.id = data.id;
@@ -30,8 +28,6 @@ export class Pokemon {
         this.sprites = data.sprites ? data.sprites : [];
         this.stats = data.stats ? data.stats : [];
         this.types = data.types ? data.types : [];
-
-        this.selected = data.selected;
     }
 }
 

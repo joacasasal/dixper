@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { trigger, style, animate, transition } from '@angular/animations';
+import { Subscription } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.module';
-
-import { Pokemon } from '../../models/pokemon.model';
 
 /**
  * Componente que muestra un Sidebar con los Detalles de un Pokémon.
@@ -28,24 +27,30 @@ import { Pokemon } from '../../models/pokemon.model';
     )
   ]
 })
-export class PokeDetailsSidebarComponent implements OnInit {
+export class PokeDetailsSidebarComponent implements OnInit, OnDestroy {
+
+  private subsStore: Subscription;
 
   public showDetails: boolean;
 
   constructor(
     private store: Store<AppState>
   ) {
-    this.store.select(state => state.pokemones).subscribe((pokemones) => {
-      if (pokemones && pokemones.list && pokemones.list.length > 0) {
-        if (pokemones.list.find((pokemon: Pokemon) => pokemon.selected)) {
-          this.showDetails = true;
-        } else {
-          this.showDetails = false;
-        }
+    this.subsStore = this.store.select(state => state.pokemones.selected).subscribe((pokemonSelected) => {
+      if (pokemonSelected) {
+        this.showDetails = true;
+      } else {
+        this.showDetails = false;
       }
    });
   }
 
   ngOnInit(): void {
+  }
+
+  // ---
+
+  ngOnDestroy(): void {
+    if (this.subsStore) { this.subsStore.unsubscribe(); }
   }
 }

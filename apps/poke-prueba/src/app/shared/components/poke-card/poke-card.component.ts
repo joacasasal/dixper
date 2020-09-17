@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.module';
@@ -21,7 +22,9 @@ import { PokemonService } from '../../services/pokemon.service';
 })
 export class PokeCardComponent implements OnInit {
 
-   TYPES = TypesConstants.TYPES;
+  private subsStore: Subscription;
+
+  TYPES = TypesConstants.TYPES;
 
   public progressMaxValue = 200;
 
@@ -29,11 +32,19 @@ export class PokeCardComponent implements OnInit {
   @Input() public noCard: boolean;
 
   public pokemon: Pokemon;
+  public isSelected: boolean;
 
   constructor(
      private store: Store<AppState>,
      public pokemonSrv: PokemonService
   ) {
+    this.subsStore = this.store.select(state => state.pokemones.selected).subscribe((pokemonSelected) => {
+      if (pokemonSelected && this.pokemon && pokemonSelected.name === this.pokemon.name) {
+        this.isSelected = true;
+      } else {
+        this.isSelected = false;
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -74,6 +85,6 @@ export class PokeCardComponent implements OnInit {
    * Selecciona el pokemon.
    */
   selectPokemon() {
-   this.store.dispatch(new SelectPokemonAction(this.pokemonID));
+    this.store.dispatch(new SelectPokemonAction(this.pokemonID));
   }
 }

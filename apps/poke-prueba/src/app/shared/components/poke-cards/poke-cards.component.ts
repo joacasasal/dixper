@@ -51,7 +51,6 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
         if (!data.results) {
           data.results = [];
         }
-        this.deselectAll(data.results);
         this.store.dispatch(new SetPokemonesListAction(data.results, type));
 
         this.pokemones = data.results;
@@ -68,24 +67,11 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
             pokemonTypeData = [...pokemonTypeData, pokemon.pokemon];
           });
         }
-        this.deselectAll(pokemonTypeData);
         this.store.dispatch(new SetPokemonesListAction(pokemonTypeData, type));
 
         this.pokemones = pokemonTypeData;
   
         subsPoke.unsubscribe();
-      });
-    }
-  }
-
-  /**
-   * Deselecciona todos los Pokémones.
-   * @param pokemones datos de los pokemones
-   */
-  deselectAll(pokemones: Pokemon[]) {
-    if (pokemones && pokemones.length > 0) {
-      pokemones.forEach((pokemon) => {
-         pokemon.selected = false;
       });
     }
   }

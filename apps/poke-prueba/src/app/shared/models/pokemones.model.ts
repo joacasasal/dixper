@@ -10,12 +10,14 @@ import { Pokemon, PokeType } from "./pokemon.model";
 export interface PokemonesState {
     list: Pokemon[];
     type: PokeType;
+    selected?: Pokemon;
 }
 
 export const inicializePokemonesState = () => {
     return {
         list: [],
-        type: null
+        type: null,
+        selected: null
     }
 }
 
@@ -59,19 +61,9 @@ export function reducerPokemones (
         case PokemonesStateActionTypes.SELECT: {
             return {
                 ...state,
-                list: state.list.map((pokemon: Pokemon) => {
-                    if (pokemon.name !== (action as SelectPokemonAction).pokemon.name) {
-                        return {
-                            ...pokemon,
-                            selected: false
-                        };
-                    } else {
-                        return {
-                            ...pokemon,
-                            selected: !pokemon.selected
-                        };
-                    }
-                })
+                selected: !state.selected || state.selected.name !== (action as SelectPokemonAction).pokemon.name
+                    ? (action as SelectPokemonAction).pokemon
+                    : null
             }
         }
         case PokemonesStateActionTypes.SELECT_TYPE: {
