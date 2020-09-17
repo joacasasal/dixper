@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Store } from '@ngrx/store';
@@ -20,7 +20,7 @@ import { PokemonService } from '../../services/pokemon.service';
   templateUrl: './poke-card.component.html',
   styleUrls: ['./poke-card.component.scss']
 })
-export class PokeCardComponent implements OnInit {
+export class PokeCardComponent implements OnInit, OnDestroy {
 
   private subsStore: Subscription;
 
@@ -30,8 +30,8 @@ export class PokeCardComponent implements OnInit {
 
   @Input() public pokemonID: Pokemon;
   @Input() public noCard: boolean;
+  @Input() public pokemon: Pokemon;
 
-  public pokemon: Pokemon;
   public isSelected: boolean;
 
   constructor(
@@ -85,6 +85,11 @@ export class PokeCardComponent implements OnInit {
    * Selecciona el pokemon.
    */
   selectPokemon() {
-    this.store.dispatch(new SelectPokemonAction(this.pokemonID));
+    this.store.dispatch(new SelectPokemonAction(this.pokemon));
+  }
+
+  // ---
+  ngOnDestroy(): void {
+    if (this.subsStore) { this.subsStore.unsubscribe(); }
   }
 }

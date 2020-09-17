@@ -29,13 +29,6 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     public pokemonSrv: PokemonService
   ) {
-    this.subsState = this.store.select(state => state.pokemones.type).subscribe((type) => {
-      if (type) {
-        this.getPokemones(type);
-      } else {
-        this.getPokemones();
-      }
-    });
   }
 
   ngOnInit(): void {
@@ -54,6 +47,18 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
         this.store.dispatch(new SetPokemonesListAction(data.results, type));
 
         this.pokemones = data.results;
+
+        if (!this.subsState) {
+          this.subsState = this.store.select(state => state.pokemones.type).subscribe((pokeType) => {
+            if (pokeType !== undefined) {
+              if (pokeType) {
+                this.getPokemones(pokeType);
+              } else {
+                this.getPokemones();
+              }
+            }
+          });
+        }
 
         subsPoke.unsubscribe();
       });

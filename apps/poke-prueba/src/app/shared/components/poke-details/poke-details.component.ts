@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.module';
 
 import { Pokemon } from '../../models/pokemon.model';
+import * as _ from 'lodash';
 
 /**
  * Componente que muestra los Detalles de un Pokémon.
@@ -22,7 +23,7 @@ export class PokeDetailsComponent implements OnInit , OnDestroy {
 
   constructor(private store: Store<AppState>) {
     this.subsStore = this.store.select(state => state.pokemones.selected).subscribe((pokemonSelected) => {
-      this.pokemon = pokemonSelected;
+      this.pokemon = _.cloneDeep(pokemonSelected);
     });
  }
 
