@@ -79,7 +79,9 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
           this.pokemonesAll = this.pokemonesAll.concat(...data.results);
           this.pokemones = this.pokemones.concat(...data.results);
 
-          this.subToState();
+          if (!this.subsState) {
+            this.subToState();
+          }
           this.isLoading = false;
         }
         subsPoke.unsubscribe();
@@ -123,18 +125,16 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
    * Subscripción al cambio de Tipo de Pokemon seleccionado.
    */
   subToState() {
-    if (!this.subsState) {
-      this.subsState = this.store.select(state => state.pokemones.type).subscribe((pokeType) => {
-        if (pokeType !== undefined) {
-          this.resetData();
-          if (pokeType) {
-            this.getPokemones(pokeType);
-          } else {
-            this.getPokemones();
-          }
+    this.subsState = this.store.select(state => state.pokemones.type).subscribe((pokeType) => {
+      if (pokeType !== undefined) {
+        this.resetData();
+        if (pokeType) {
+          this.getPokemones(pokeType);
+        } else {
+          this.getPokemones();
         }
-      });
-    }
+      }
+    });
   }
 
   /**
