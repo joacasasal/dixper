@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, debounceTime } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
 import { Pokemon, PokemonResponse, PokemonTypeResponse, PokemonTypesResponse, PokeType } from '../models/pokemon.model';
@@ -20,10 +20,13 @@ export class PokemonService {
 
   /**
    * Obtiene todos los pokemones, pudiendo paginar.
+   * @param numPokes número de pokemones a obtener
+   * @param offet número de pokemones ya obtenidos
    */
-  public getPokemones(): Observable<PokemonResponse> {
+  public getPokemones(numPokes: number, offset?: number): Observable<PokemonResponse> {
     const params = {
-      // limit: '6' // Pagina el número de pokemones
+      limit: numPokes ? numPokes.toString() : '6', // Pagina el número de pokemones
+      offset: offset.toString() // Desde qué número obtener datos
     };
 
     return this.http.get<PokemonResponse>(this.apiUrl + 'pokemon', { params, observe: 'response' }).pipe(
@@ -43,11 +46,7 @@ export class PokemonService {
    * @param type tipo de pokémon
    */
   public getPokemonesByType(type?: PokeType): Observable<PokemonTypeResponse> {
-    const params = {
-      limit: '6'
-    };
-
-    return this.http.get<PokemonTypeResponse>(type.url, { params, observe: 'response' }).pipe(
+    return this.http.get<PokemonTypeResponse>(type.url, { observe: 'response' }).pipe(
       map(data => {
         if (data && data.body) {
           return data.body;

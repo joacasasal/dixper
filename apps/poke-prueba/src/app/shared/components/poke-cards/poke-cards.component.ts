@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import * as _ from 'lodash';
 
 import { Store } from '@ngrx/store';
@@ -20,16 +21,21 @@ import { PokemonService } from '../../services/pokemon.service';
 })
 export class PokeCardsComponent implements OnInit, OnDestroy {
 
+  @ViewChild('pokeCards') private scrollContainer: ElementRef;
+
   private subsStore: Subscription;
   private subsState: Subscription;
 
-  public pokemonesAll: Pokemon[];
-  public pokemones: Pokemon[];
+  public pokemonesAll: Pokemon[] = [];
+  public pokemones: Pokemon[] = [];
+  public pokeTypeSelected: PokeType;
+  private maxPokemones: number;
 
   public isLoading: boolean;
 
   // Pag
   public actualPag = 1;
+  public delaySeconds = 2;
 
   constructor(
     private store: Store<AppState>,
@@ -38,7 +44,19 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    window.scroll(0, 0);
+
+    this.resetData();
     this.getPokemones();
+  }
+
+  /**
+   * Resetea los datos.
+   */
+  resetData() {
+    this.actualPag = 1;
+    this.pokemonesAll = [];
+    this.pokemones = [];
   }
 
   /**
@@ -46,55 +64,92 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
    */
   getPokemones(type?: PokeType) {
     this.isLoading = true;
-    window.scroll(0, 0);
+
     if (!type) { // Todos
-      const subsPoke = this.pokemonSrv.getPokemones().subscribe((data: PokemonResponse) => {
+      this.pokeTypeSelected = type;
+
+      const subsPoke = this.pokemonSrv.getPokemones(6, 6 * (this.actualPag - 1))
+      .pipe(debounceTime(2000))
+      .subscribe((data: PokemonResponse) => {
         if (!data.results) {
           data.results = [];
         }
+        this.maxPokemones = data.count;
         this.store.dispatch(new SetPokemonesListAction(data.results, type));
 
-        this.pokemonesAll = data.results;
-        this.pokemones = data.results.slice(0, 6 * this.actualPag);
+        this.pokemonesAll = this.pokemonesAll.concat(...data.results);
+        this.pokemones = this.pokemones.concat(...data.results);
 
-        if (!this.subsState) {
-          this.subsState = this.store.select(state => state.pokemones.type).subscribe((pokeType) => {
-            if (pokeType !== undefined) {
-              if (pokeType) {
-                this.getPokemones(pokeType);
-              } else {
-                this.getPokemones();
-              }
-            }
-          });
-        }
-
+        this.subToState();
         this.isLoading = false;
         subsPoke.unsubscribe();
       });
     } else { // Por tipo
-      const subsPoke = this.pokemonSrv.getPokemonesByType(type).subscribe((data: PokemonTypeResponse) => {
-        let pokemonTypeData = [];
-        if (!data.pokemon) {
-          data.pokemon = [];
-        } else {
-          data.pokemon.map((pokemon) => {
-            pokemonTypeData = [...pokemonTypeData, pokemon.pokemon];
-          });
-        }
-        this.store.dispatch(new SetPokemonesListAction(pokemonTypeData, type));
+      if (!this.pokeTypeSelected || this.pokeTypeSelected !== type) { // Obtiene los pokemones del tipo
+        window.scroll(0, 0);
+        this.pokeTypeSelected = type;
 
-        this.pokemones = pokemonTypeData;
+        const subsPoke = this.pokemonSrv.getPokemonesByType(type)
+          .subscribe((data: PokemonTypeResponse) => {
+          let pokemonTypeData = [];
+          if (!data.pokemon) {
+            data.pokemon = [];
+          } else {
+            data.pokemon.map((pokemon) => {
+              pokemonTypeData = [...pokemonTypeData, pokemon.pokemon];
+            });
+          }
+          this.store.dispatch(new SetPokemonesListAction(pokemonTypeData, type));
   
-        this.isLoading = false;
-        subsPoke.unsubscribe();
+          this.pokemonesAll = pokemonTypeData;
+          this.pokemones = pokemonTypeData.slice(0, 6 * this.actualPag);
+    
+          this.isLoading = false;
+          subsPoke.unsubscribe();
+        });
+      } else { // Cambia de página para mostrar los 6 próximos pokemones
+        setTimeout(() => {
+          this.pokemones = this.pokemonesAll.slice(0, 6 * this.actualPag);
+
+          this.isLoading = false;
+        }, this.delaySeconds * 1000);
+      }
+    }
+  }
+
+  /**
+   * Subscripción al cambio de Tipo de Pokemon seleccionado.
+   */
+  subToState() {
+    if (!this.subsState) {
+      this.subsState = this.store.select(state => state.pokemones.type).subscribe((pokeType) => {
+        if (pokeType !== undefined) {
+          this.resetData();
+          if (pokeType) {
+            this.getPokemones(pokeType);
+          } else {
+            this.getPokemones();
+          }
+        }
       });
     }
   }
 
-  onScroll($event: any) {
-    console.log($event);
-  };
+  /**
+   * Cambia de página al hacer scroll hacia abajo.
+   * @param event evento de scroll
+   */
+  @HostListener('mousewheel', ['$event'])
+  onMousewheel(event: any) {
+    if (this.scrollContainer && event.wheelDelta < 0) {
+      if(!this.isLoading) {
+        if (this.pokemonesAll.length !== this.pokemones.length || (!this.pokeTypeSelected && this.pokemones.length < this.maxPokemones)) {
+          this.actualPag++;
+          this.getPokemones(this.pokeTypeSelected);
+        }
+      }
+    }
+  }
 
   // ---
 
