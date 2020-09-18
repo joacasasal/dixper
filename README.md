@@ -2,6 +2,8 @@
 
 This project was generated using [Nx](https://nx.dev).
 
+## Pokeprueba
+
 ##### SERVE
 
 Run `ng serve my-app` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
@@ -22,5 +24,5 @@ Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cy
 
 Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
 
-##### GENERAR DOCUMENTACI&Oacute;N:
+##### AUTO DOCUMENTATION
 Run `ng compodoc` to generate the auto documentation in the `documentation/` directory.
