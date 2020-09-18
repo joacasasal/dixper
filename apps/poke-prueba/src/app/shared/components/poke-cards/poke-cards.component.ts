@@ -1,7 +1,5 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-import * as _ from 'lodash';
+import { Subject, Subscription } from 'rxjs';
 
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../app.module';
@@ -25,6 +23,7 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
 
   private subsStore: Subscription;
   private subsState: Subscription;
+  private subjPoke = new Subject();
 
   public pokemonesAll: Pokemon[] = [];
   public pokemones: Pokemon[] = [];
@@ -69,7 +68,6 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
       this.pokeTypeSelected = type;
 
       const subsPoke = this.pokemonSrv.getPokemones(6, 6 * (this.actualPag - 1))
-      .pipe(debounceTime(2000))
       .subscribe((data: PokemonResponse) => {
         if (!data.results) {
           data.results = [];

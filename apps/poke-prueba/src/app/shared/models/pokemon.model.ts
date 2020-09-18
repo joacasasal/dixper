@@ -40,6 +40,14 @@ export class PokeType {
 }
 
 /**
+ * Modelo de los params de la PokeAPI.
+ */
+export class PokemonParams {
+    limit?: string;
+    offset?: string;
+}
+
+/**
  * Respuesta de los Pokemones.
  */
 export class PokemonResponse {

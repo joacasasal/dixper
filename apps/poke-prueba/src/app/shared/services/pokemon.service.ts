@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, catchError, debounceTime } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { map, catchError, delay, debounceTime } from 'rxjs/operators';
 
-import { Pokemon, PokemonResponse, PokemonTypeResponse, PokemonTypesResponse, PokeType } from '../models/pokemon.model';
+import { Pokemon, PokemonParams, PokemonResponse, PokemonTypeResponse, PokemonTypesResponse, PokeType } from '../models/pokemon.model';
 
 /**
  * Servicio de PokeAPI.
@@ -30,6 +30,8 @@ export class PokemonService {
     };
 
     return this.http.get<PokemonResponse>(this.apiUrl + 'pokemon', { params, observe: 'response' }).pipe(
+      debounceTime(2000),
+      delay(2000),
       map(data => {
         if (data && data.body) {
           return data.body;
@@ -47,6 +49,8 @@ export class PokemonService {
    */
   public getPokemonesByType(type?: PokeType): Observable<PokemonTypeResponse> {
     return this.http.get<PokemonTypeResponse>(type.url, { observe: 'response' }).pipe(
+      debounceTime(2000),
+      delay(2000),
       map(data => {
         if (data && data.body) {
           return data.body;
@@ -63,14 +67,20 @@ export class PokemonService {
    * @param pokemonUrl url del pokemon
    */
   public getPokemon(pokemonUrl: string): Observable<Pokemon> {
-    return this.http.get<Pokemon>(pokemonUrl);
+    return this.http.get<Pokemon>(pokemonUrl).pipe(
+      map(data => {
+        return data;
+      }),
+      catchError((error: any) => {
+        return throwError(error);
+      })
+    );
   }
 
   /**
    * Obtiene los tipos de Pokémon.
    */
   public getPokemonesTypes(): Observable<PokemonTypesResponse> {
-
     return this.http.get<PokemonTypesResponse>(this.apiUrl + 'type', { observe: 'response' }).pipe(
       map(data => {
         if (data && data.body) {
