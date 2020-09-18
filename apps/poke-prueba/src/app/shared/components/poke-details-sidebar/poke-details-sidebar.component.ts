@@ -56,9 +56,9 @@ export class PokeDetailsSidebarComponent implements OnInit, OnDestroy {
    * @param event evento de click
    */
   @HostListener('document:mousedown', ['$event'])
-  closeSidebar(event: any): void {
+  closeSidebar(event?: any): void {
      if (this.showDetails
-      && !this.elementRef.nativeElement.contains(event.target) && (!event.srcElement || event.srcElement.id !== 'poke-card')) {
+      && (!event || !this.elementRef.nativeElement.contains(event.target) && (!event.srcElement || event.srcElement.id !== 'poke-card'))) {
       this.store.dispatch(new SelectPokemonAction(null));
      }
   }

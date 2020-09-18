@@ -1,7 +1,7 @@
 <!-- dixper-poke-cards -->
 <div *ngIf="pokemones.length > 0" class="poke-cards">
     <div class="row" #pokeCards (scroll)="onScroll($event)">
-        <div class="col-sm-12 col-md-4 poke-card" *ngFor="let pokemon of pokemones">
+        <div class="col-xm-12 col-sm-6 col-md-4 poke-card" *ngFor="let pokemon of pokemones">
             <dixper-poke-card [pokemonID]="pokemon"></dixper-poke-card>
         </div>
         <!-- Spinner -->

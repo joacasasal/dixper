@@ -1,5 +1,8 @@
 <!-- app-poke-details-sidebar -->
 <div *ngIf="showDetails" class="poke-details-sidebar overflow-auto" [@fadeAnim]>
+    <button type="button" class="close" aria-label="Close" (click)="closeSidebar()">
+        <span aria-hidden="true">×</span>
+    </button>
     <dixper-poke-details></dixper-poke-details>
 </div>
 <!-- end app-poke-details-sidebar -->
