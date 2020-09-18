@@ -34,29 +34,29 @@
         {{type.type.name |uppercase}}<span *ngIf="pokemon.types[t + 1]" class="text-muted"> · </span>
       </span>
     </div>
-  </div>
 
-  <!-- Stats -->
-  <div *ngIf="noCard" class="card-footer">
-    <div *ngFor="let stat of pokemon.stats" class="row d-flex justify-content-center align-items-center">
-      <div class="col-4 text-right">
-        <span class="stat-title mb-2 text-muted">
-          {{stat.stat.name |titlecase}}
-        </span>
-      </div>
-      <div class="col-2">
-        {{stat.base_stat}}
-      </div>
-      <div class="col-6">
-        <div class="progress">
-          <div class="progress-bar" role="progressbar"
-            aria-valuemin="0" [aria-valuemax]="progressMaxValue"
-            [aria-valuenow]="stat.base_stat"
-            [ngStyle]="{
-              'width': (((stat.base_stat * 100) / progressMaxValue) + '%'),
-              'background-color': getProgressColor(stat.base_stat)
-            }"
-          ></div>
+    <!-- Stats -->
+    <div *ngIf="noCard" class="poke-stats">
+      <div *ngFor="let stat of pokemon.stats" class="row d-flex justify-content-center align-items-center">
+        <div class="col-4 text-right">
+          <span class="stat-title mb-2 text-muted">
+            {{stat.stat.name |titlecase}}
+          </span>
+        </div>
+        <div class="col-2">
+          {{stat.base_stat}}
+        </div>
+        <div class="col-6">
+          <div class="progress">
+            <div class="progress-bar" role="progressbar"
+              aria-valuemin="0" [aria-valuemax]="progressMaxValue"
+              [aria-valuenow]="stat.base_stat"
+              [ngStyle]="{
+                'width': (((stat.base_stat * 100) / progressMaxValue) + '%'),
+                'background-color': getProgressColor(stat.base_stat)
+              }"
+            ></div>
+          </div>
         </div>
       </div>
     </div>

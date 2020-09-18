@@ -1,18 +1,32 @@
 .poke-types-sidebar {
     position: fixed;
     left: 0;
-    top: 0;
+    bottom: 0;
     z-index: 5;
     -webkit-box-shadow: 5px 0px 15px -5px rgba(0,0,0,0.25);
     -moz-box-shadow: 5px 0px 15px -5px rgba(0,0,0,0.25);
     box-shadow: 5px 0px 15px -5px rgba(0,0,0,0.25);
     background-color: white;
 
-    padding: 10px;
-    height: 100vh;
-    width: 12%;
+    height: 60px;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
 
     .poke-type {
         margin: 10px;
+    }
+
+    /* Medium devices (landscape tablets, 768px and up) */
+    @media only screen and (min-width: 768px) {
+        left: 0;
+        top: 0;
+
+        height: 100vh;
+        width: 12%;
+
+        display: flex;
+        flex-direction: column;
     }
 }
