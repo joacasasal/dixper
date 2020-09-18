@@ -17,7 +17,7 @@ export const inicializePokemonesState = () => {
     return {
         list: [],
         type: null,
-        selected: null
+        selected: undefined
     }
 }
 
@@ -55,7 +55,8 @@ export function reducerPokemones (
         case PokemonesStateActionTypes.SET: {
             return {
                 list: (action as SetPokemonesListAction).pokemones,
-                type: (action as SetPokemonesListAction).pokeType
+                type: (action as SetPokemonesListAction).pokeType,
+                selected: null
             };
         }
         case PokemonesStateActionTypes.SELECT: {

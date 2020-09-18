@@ -40,7 +40,7 @@ export class PokeDetailsSidebarComponent implements OnInit, OnDestroy {
     private elementRef: ElementRef
   ) {
     this.subsStore = this.store.select(state => state.pokemones.selected).subscribe((pokemonSelected) => {
-      if (pokemonSelected) {
+      if (pokemonSelected !== null && this.showDetails !== undefined) {
         this.showDetails = true;
       } else {
         this.showDetails = false;

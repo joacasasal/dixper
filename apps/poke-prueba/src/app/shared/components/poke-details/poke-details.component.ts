@@ -23,7 +23,9 @@ export class PokeDetailsComponent implements OnInit , OnDestroy {
 
   constructor(private store: Store<AppState>) {
     this.subsStore = this.store.select(state => state.pokemones.selected).subscribe((pokemonSelected) => {
-      this.pokemon = _.cloneDeep(pokemonSelected);
+      if (pokemonSelected !== undefined) {
+        this.pokemon = _.cloneDeep(pokemonSelected);
+      }
     });
  }
 

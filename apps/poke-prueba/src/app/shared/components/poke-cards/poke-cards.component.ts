@@ -69,17 +69,19 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
 
       const subsPoke = this.pokemonSrv.getPokemones(6, 6 * (this.actualPag - 1))
       .subscribe((data: PokemonResponse) => {
-        if (!data.results) {
-          data.results = [];
+        if (!type) { // Se comprueba que no se haya seleccionado un tipo mientras se procesa
+          if (!data.results) {
+            data.results = [];
+          }
+          this.maxPokemones = data.count;
+          this.store.dispatch(new SetPokemonesListAction(data.results, type));
+
+          this.pokemonesAll = this.pokemonesAll.concat(...data.results);
+          this.pokemones = this.pokemones.concat(...data.results);
+
+          this.subToState();
+          this.isLoading = false;
         }
-        this.maxPokemones = data.count;
-        this.store.dispatch(new SetPokemonesListAction(data.results, type));
-
-        this.pokemonesAll = this.pokemonesAll.concat(...data.results);
-        this.pokemones = this.pokemones.concat(...data.results);
-
-        this.subToState();
-        this.isLoading = false;
         subsPoke.unsubscribe();
       });
     } else { // Por tipo
@@ -89,21 +91,23 @@ export class PokeCardsComponent implements OnInit, OnDestroy {
 
         const subsPoke = this.pokemonSrv.getPokemonesByType(type)
           .subscribe((data: PokemonTypeResponse) => {
-          let pokemonTypeData = [];
-          if (!data.pokemon) {
-            data.pokemon = [];
-          } else {
-            data.pokemon.map((pokemon) => {
-              pokemonTypeData = [...pokemonTypeData, pokemon.pokemon];
-            });
-          }
-          this.store.dispatch(new SetPokemonesListAction(pokemonTypeData, type));
-  
-          this.pokemonesAll = pokemonTypeData;
-          this.pokemones = pokemonTypeData.slice(0, 6 * this.actualPag);
-    
-          this.isLoading = false;
-          subsPoke.unsubscribe();
+            if (type === this.pokeTypeSelected) {  // Se comprueba que no se haya cambiado de tipo mientras se procesa
+              let pokemonTypeData = [];
+              if (!data.pokemon) {
+                data.pokemon = [];
+              } else {
+                data.pokemon.map((pokemon) => {
+                  pokemonTypeData = [...pokemonTypeData, pokemon.pokemon];
+                });
+              }
+              this.store.dispatch(new SetPokemonesListAction(pokemonTypeData, type));
+      
+              this.pokemonesAll = pokemonTypeData;
+              this.pokemones = pokemonTypeData.slice(0, 6 * this.actualPag);
+        
+              this.isLoading = false;
+            }
+            subsPoke.unsubscribe();
         });
       } else { // Cambia de página para mostrar los 6 próximos pokemones
         setTimeout(() => {
